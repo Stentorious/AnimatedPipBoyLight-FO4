@@ -20,7 +20,7 @@ EndGroup
 
 Group Mod
 	; formlists
-	FormList Property AnimatedPipBoyLightFormList_FilterLight Auto Const Mandatory
+	FormList Property AnimatedPipBoyLightFormList_ReplaceLight Auto Const Mandatory
 	; animations
 	Idle Property PipBoyLight_Activate Auto Const Mandatory
 EndGroup
@@ -110,9 +110,9 @@ EndFunction
 bool Function IsPipBoyLightReplaced()
 
 	int iIndex
-	int iSize = AnimatedPipBoyLightFormList_FilterLight.GetSize()
+	int iSize = AnimatedPipBoyLightFormList_ReplaceLight.GetSize()
 	while iIndex < iSize
-		Keyword kKeyword = AnimatedPipBoyLightFormList_FilterLight.GetAt(iIndex) as Keyword
+		Keyword kKeyword = AnimatedPipBoyLightFormList_ReplaceLight.GetAt(iIndex) as Keyword
 		if PlayerRef.WornHasKeyword(kKeyword)
 			return true
 		endif
