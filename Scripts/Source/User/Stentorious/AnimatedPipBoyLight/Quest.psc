@@ -19,6 +19,8 @@ Group Base
 EndGroup
 
 Group Mod
+	; formlists
+	FormList Property AnimatedPipBoyLightFormList_FilterLight Auto Const Mandatory
 	; animations
 	Idle Property PipBoyLight_Activate Auto Const Mandatory
 EndGroup
@@ -78,7 +80,7 @@ Function TogglePipBoyLight()
 	RegisterForKey(scanCode)
 
 	; Instantly toggle light
-	if Game.GetCameraState() != 0 || PlayerRef.IsInPowerArmor() || PlayerRef.GetSitState() != 0
+	if Game.GetCameraState() != 0 || PlayerRef.IsInPowerArmor() || PlayerRef.GetSitState() != 0 || IsPipBoyLightReplaced()
 		lightStage = 3
 		GardenOfEden3.TogglePipboyLight()
 
@@ -101,6 +103,23 @@ Function TogglePipBoyLight()
 
 	StartTimer(fAnimKey_ToggleLight, iTimerID_ToggleLight)
 	StartTimer(fAnimLength, iTimerID_IdleAnim)
+
+EndFunction
+
+; Checks if the player is wearing any armor/weapon that replaces the Pip-Boy light
+bool Function IsPipBoyLightReplaced()
+
+	int iIndex
+	int iSize = AnimatedPipBoyLightFormList_FilterLight.GetSize()
+	while iIndex < iSize
+		Keyword kKeyword = AnimatedPipBoyLightFormList_FilterLight.GetAt(iIndex) as Keyword
+		if PlayerRef.WornHasKeyword(kKeyword)
+			return true
+		endif
+		iIndex += 1
+	endWhile
+
+	return false
 
 EndFunction
 
@@ -130,11 +149,7 @@ EndEvent
 
 Event OnControlDown(string control)
 
-	if Utility.IsInMenuMode()
-		return
-	endif
-
-	if lightStage > 0 || PlayerRef.IsDead() || PlayerRef.IsInScene() != 0
+	if lightStage > 0 || Utility.IsInMenuMode() || PlayerRef.IsDead() || PlayerRef.HasNode("ScreenGlowEffect01") == false ; || PlayerRef.IsInScene() != 0
 		return
 	endif
 	lightStage = 1
