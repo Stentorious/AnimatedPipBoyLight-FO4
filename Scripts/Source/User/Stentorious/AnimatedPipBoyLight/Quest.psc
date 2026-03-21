@@ -48,7 +48,9 @@ Function OnGameLoad()
 
 	; Check for requirements
 	if F4SE.GetPluginVersion("GardenOfEdenPapyrusScriptExtender") < 369098752
-		Debug.MessageBox("Animated Pip-Boy Light missing requirement. Install latest Garden of Eden Papyrus Extender")
+		Var[] args = new Var[1]
+		args[0] = "Animated Pip-Boy Light missing requirement.\nInstall latest Garden of Eden Papyrus Extender."
+		Utility.CallGlobalFunction("Debug", "MessageBox", args)
 		return
 	endif
 
@@ -62,7 +64,10 @@ Function OnGameLoad()
 	RegisterEvents(true)
 
 	; Disable vanilla Pip-Boy light activation
-	GardenOfEden2.ExecuteConsoleCommand("SetINI \"fPipboyLightDelay:Controls\" 99999999")
+	Var[] args = new Var[2]
+	args[0] = "fPipboyLightDelay:Controls"
+	args[1] = 99999999.0
+	Utility.CallGlobalFunction("Utility", "SetINIFloat", args)
 
 	; Reset input layer if active
 	lightStage = 0
