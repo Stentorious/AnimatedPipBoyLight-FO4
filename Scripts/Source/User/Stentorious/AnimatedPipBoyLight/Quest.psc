@@ -23,6 +23,8 @@ Group Mod
 	FormList Property AnimatedPipBoyLightFormList_ReplaceLight Auto Const Mandatory
 	; animations
 	Idle Property PipBoyLight_Activate Auto Const Mandatory
+	; sound
+	Sound Property AnimatedPipBoyLightFoley Auto Const Mandatory
 EndGroup
 
 Group Internal
@@ -101,6 +103,7 @@ Function TogglePipBoyLight()
 	; Play idle animation
 	lightStage = 2
 	PlayerRef.PlayIdle(PipBoyLight_Activate)
+	AnimatedPipBoyLightFoley.Play(PlayerRef)
 
 	; Disable player controls
 	inputLayer = InputEnableLayer.Create()
