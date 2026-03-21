@@ -5,7 +5,7 @@
 Adds a unique first-person animation for toggling the Pip-Boy light.
 
 ## Requirements
-- F4SE
+- [F4SE](https://www.nexusmods.com/fallout4/mods/42147)
 - [Garden of Eden Papyrus Extender](https://www.nexusmods.com/fallout4/mods/74160)
 
 ## Installation
