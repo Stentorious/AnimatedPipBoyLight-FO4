@@ -44,6 +44,12 @@ EndGroup
 
 Function OnGameLoad()
 
+	; Check for requirements
+	if F4SE.GetPluginVersion("GardenOfEdenPapyrusScriptExtender") < 369098752
+		Debug.MessageBox("Animated Pip-Boy Light missing requirement. Install latest Garden of Eden Papyrus Extender")
+		return
+	endif
+
 	; Release Version
 	if modVersion < 1.00
 		Debug.Trace("Animated Pip-Boy Light: Init")
@@ -149,7 +155,11 @@ EndEvent
 
 Event OnControlDown(string control)
 
-	if lightStage > 0 || Utility.IsInMenuMode() || PlayerRef.IsDead() || PlayerRef.HasNode("ScreenGlowEffect01") == false ; || PlayerRef.IsInScene() != 0
+	; Get equipped Pip-Boy
+	Actor:WornItem kPipBoy = PlayerRef.GetWornItem(30, true)
+
+	; Check if player can currently toggle light
+	if lightStage > 0 || Utility.IsInMenuMode() || PlayerRef.IsDead() || !kPipBoy.item; || PlayerRef.HasNode("ScreenGlowEffect01") == false ; || PlayerRef.IsInScene() != 0
 		return
 	endif
 	lightStage = 1
