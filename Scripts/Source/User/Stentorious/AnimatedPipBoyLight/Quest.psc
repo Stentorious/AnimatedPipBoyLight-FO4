@@ -3,7 +3,7 @@ Scriptname Stentorious:AnimatedPipBoyLight:Quest extends Quest
 ; #### VARIABLES ####
 bool controlDown = false
 int scanCode
-int scanCodeKeyboard
+int scanCodeKBM
 int lightStage = 0
 ; 0 = Waiting for input
 ; 1 = Holding down control
@@ -91,9 +91,12 @@ Function TogglePipBoyLight()
 	; Register temporary key event
 	controlDown = true
 	scanCode = Input.GetMappedKey("Pipboy")
-	scanCodeKeyboard = Input.GetMappedKey("Pipboy", 0)
-	if scanCode != scanCodeKeyboard
-		RegisterForKey(scanCodeKeyboard)
+	scanCodeKBM = Input.GetMappedKey("Pipboy", 0)
+	if scanCodeKBM == -1
+		scanCodeKBM = Input.GetMappedKey("Pipboy", 1)
+	endif
+	if scanCode != scanCodeKBM && scanCodeKBM != -1
+		RegisterForKey(scanCodeKBM)
 	endif
 	RegisterForKey(scanCode)
 
@@ -201,7 +204,7 @@ Event OnTimer(int aiTimerID)
 			lightStage = 0
 			RemoveInputLayer()
 			UnregisterForKey(scanCode)
-			UnregisterForKey(scanCodeKeyboard)
+			UnregisterForKey(scanCodeKBM)
 		endif
 	endif
 EndEvent
@@ -216,6 +219,6 @@ Event OnKeyUp(int keyCode, float time)
 		lightStage = 0
 		RemoveInputLayer()
 		UnregisterForKey(scanCode)
-		UnregisterForKey(scanCodeKeyboard)
+		UnregisterForKey(scanCodeKBM)
 	endif
 EndEvent
