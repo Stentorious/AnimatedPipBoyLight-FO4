@@ -17,6 +17,8 @@ InputEnableLayer inputLayer
 Group Base
 	; actors
 	Actor Property PlayerRef Auto Const Mandatory
+	; keywords
+	Keyword Property ma_PA_Helmet Auto Const Mandatory
 EndGroup
 
 Group Mod
@@ -100,16 +102,30 @@ Function TogglePipBoyLight()
 	endif
 	RegisterForKey(scanCode)
 
+	; Check if light should instantly toggle
+	int instantToggle = 0
+	if PlayerRef.IsInPowerArmor()
+		if PlayerRef.WornHasKeyword(ma_PA_Helmet) || IsPipBoyLightReplaced()
+			instantToggle = 1
+		else
+			instantToggle = 2
+		endif
+	elseif Game.GetCameraState() != 0 || PlayerRef.GetSitState() != 0 || IsPipBoyLightReplaced()
+		instantToggle = 1
+	endif
+
 	; Instantly toggle light
-	if Game.GetCameraState() != 0 || PlayerRef.IsInPowerArmor() || PlayerRef.GetSitState() != 0 || IsPipBoyLightReplaced()
+	if instantToggle > 0
 		lightStage = 3
-		GardenOfEden3.TogglePipboyLight()
+
+		if instantToggle == 1
+			GardenOfEden3.TogglePipboyLight()
+		endif
 
 		; Disable player controls
 		inputLayer = InputEnableLayer.Create()
 		inputLayer.DisablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = true, abLooking = false, \
 			abSneaking = false, abMenu = true, abActivate = false, abJournalTabs = true, abVATS = true, abFavorites = false, abRunning = false)
-
 		return
 	endif
 
